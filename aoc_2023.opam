@@ -12,6 +12,7 @@ bug-reports: "https://github.com/Rascat/aoc_2023/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.12"}
+  "re"
   "alcotest" {with-test}
   "odoc" {with-doc}
 ]

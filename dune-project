@@ -19,7 +19,7 @@
  (name aoc_2023)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune (alcotest :with-test))
+ (depends ocaml dune re (alcotest :with-test))
  (tags
   (topics "to describe" your project)))
 
