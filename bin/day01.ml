@@ -1,1 +1,0 @@
-let world = "Hello, day one!"
