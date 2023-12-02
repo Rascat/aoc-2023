@@ -32,7 +32,7 @@ let parse_round s =
   { red; blue; green }
 ;;
 
-let parse_game_line line =
+let parse_game line =
   let game_rounds_split = String.split_on_char ':' line in
   let game_part = List.nth game_rounds_split 0 in
   let rounds_part = List.nth game_rounds_split 1 in
@@ -42,21 +42,43 @@ let parse_game_line line =
   { id; rounds }
 ;;
 
+let power_of_set (set : round) = set.red * set.green * set.blue
+
+let minimal_set_for_rounds rounds =
+  let red =
+    List.fold_left (fun acc round -> if round.red > acc then round.red else acc) 0 rounds
+  in
+  let green =
+    List.fold_left
+      (fun acc round -> if round.green > acc then round.green else acc)
+      0
+      rounds
+  in
+  let blue =
+    List.fold_left
+      (fun acc round -> if round.blue > acc then round.blue else acc)
+      0
+      rounds
+  in
+  { red; green; blue }
+;;
+
 let solve_part_one data =
   let max_red = 12 in
   let max_green = 13 in
   let max_blue = 14 in
-  let games = List.map parse_game_line data in
-  let possible_games =
-    List.filter
-      (fun game ->
-        List.for_all
-          (fun round ->
-            round.red <= max_red && round.green <= max_green && round.blue <= max_blue)
-          game.rounds)
-      games
-  in
-  List.fold_left (fun acc game -> acc + game.id) 0 possible_games
+  List.map parse_game data
+  |> List.filter (fun game ->
+    List.for_all
+      (fun round ->
+        round.red <= max_red && round.green <= max_green && round.blue <= max_blue)
+      game.rounds)
+  |> List.fold_left (fun acc game -> acc + game.id) 0
 ;;
 
-let solve_part_two _data = failwith "Not implemented yet"
+let solve_part_two data =
+  List.map parse_game data
+  |> List.map (fun game -> minimal_set_for_rounds game.rounds)
+  |> List.map power_of_set
+  |> List.fold_left ( + ) 0
+;;
