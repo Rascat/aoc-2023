@@ -9,11 +9,6 @@ type game =
   ; rounds : round list
   }
 
-let parse_color_red s =
-  try Scanf.sscanf s "%s@red: %d" (fun _ red -> red) with
-  | Scanf.Scan_failure _ -> 0
-;;
-
 let parse_color s re_color =
   let open Re.Str in
   match search_forward re_color s 0 with
