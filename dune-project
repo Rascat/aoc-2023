@@ -18,8 +18,8 @@
 (package
  (name aoc_2023)
  (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune re (alcotest :with-test))
+ (description "My solutions to the Advent of Code 2023")
+ (depends ocaml dune re base (alcotest :with-test))
  (tags
   (topics "to describe" your project)))
 
