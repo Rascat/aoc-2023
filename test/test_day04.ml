@@ -25,6 +25,11 @@ let test_solve_part_one =
   Alcotest.(check int) "same total" 13 actual
 ;;
 
+let test_solve_part_two =
+  let actual = solve_part_two test_data in
+  Alcotest.(check int) "same total" 30 actual
+;;
+
 let () =
   let open Alcotest in
   run
@@ -39,6 +44,8 @@ let () =
               })
         ] )
     ; ( "solve_part_one"
-      , [ test_case "solve_part_one" `Quick (fun () -> test_solve_part_one) ] )
+      , [ test_case "solve_part_one" `Quick (fun () -> test_solve_part_one)
+        ; test_case "solve part two" `Quick (fun () -> test_solve_part_two)
+        ] )
     ]
 ;;

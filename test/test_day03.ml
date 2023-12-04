@@ -42,8 +42,8 @@ let () =
   let open Alcotest in
   run
     "Day03"
-    [ "solve parts", [ test_case "solve_part_one" `Quick test_solve_part_one ];
-      ( "parse_digit_meta"
+    [ "solve parts", [ test_case "solve_part_one" `Quick test_solve_part_one ]
+    ; ( "parse_digit_meta"
       , [ test_case "first" `Quick (fun () ->
             test_parse_digit_meta
               "467..114.."
@@ -71,22 +71,22 @@ let () =
               ; "...$.*...."
               ; ".664.598.."
               ]
-              false);
-              test_case "second" `Quick (fun () ->
-                test_check_adjacent_positions
-                  { value = 633; line_nr = 2; starts_at = 6; length = 3 }
-                  [ "467..114.."
-                  ; "...*......"
-                  ; "..35..633."
-                  ; "......#..."
-                  ; "617*......"
-                  ; ".....+.58."
-                  ; "..592....."
-                  ; "......755."
-                  ; "...$.*...."
-                  ; ".664.598.."
-                  ]
-                  true)
+              false)
+        ; test_case "second" `Quick (fun () ->
+            test_check_adjacent_positions
+              { value = 633; line_nr = 2; starts_at = 6; length = 3 }
+              [ "467..114.."
+              ; "...*......"
+              ; "..35..633."
+              ; "......#..."
+              ; "617*......"
+              ; ".....+.58."
+              ; "..592....."
+              ; "......755."
+              ; "...$.*...."
+              ; ".664.598.."
+              ]
+              true)
         ] )
     ]
 ;;

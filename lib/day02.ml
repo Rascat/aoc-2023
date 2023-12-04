@@ -75,5 +75,5 @@ let solve_part_two data =
   List.map parse_game data
   |> List.map (fun game -> minimal_set_for_rounds game.rounds)
   |> List.map power_of_set
-  |> List.fold_left ( + ) 0
+  |> Utils.sum
 ;;

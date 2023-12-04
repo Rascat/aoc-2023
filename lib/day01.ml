@@ -35,7 +35,7 @@ let solve_part_one data =
   List.map remove_letters_from_string data
   |> List.map concat_first_and_last
   |> List.map int_of_string
-  |> List.fold_left ( + ) 0
+  |> Utils.sum
 ;;
 
 let solve_part_two data =
@@ -43,5 +43,5 @@ let solve_part_two data =
   |> List.map remove_letters_from_string
   |> List.map concat_first_and_last
   |> List.map int_of_string
-  |> List.fold_left ( + ) 0
+  |> Utils.sum
 ;;

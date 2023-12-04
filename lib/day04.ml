@@ -36,13 +36,37 @@ let compute_card_score num_matches =
     (if num_matches >= 1 then Float.pow 2.0 (float_of_int (num_matches - 1)) else 0.0)
 ;;
 
+let rec inc_next_n_by curr_index n inc deck =
+  if n = 0
+  then deck
+  else (
+    let next_index = (curr_index + 1) mod Array.length deck in
+    deck.(next_index) <- deck.(next_index) + inc;
+    inc_next_n_by next_index (n - 1) inc deck)
+;;
+
 let solve_part_one _data =
   let cards = _data |> List.map parse_card in
   List.map
     (fun card -> count_matching_numbers card.winning_numbers card.own_numbers)
     cards
   |> List.map compute_card_score
-  |> List.fold_left ( + ) 0
+  |> Utils.sum
 ;;
 
-let solve_part_two _data = failwith "Not implemented yet"
+let solve_part_two _data =
+  let cards = _data |> List.map parse_card in
+  let deck = Array.make (List.length cards) 1 in
+  let rec loop cards deck =
+    match cards with
+    | [] -> deck
+    | card :: rest ->
+      let num_matches = count_matching_numbers card.winning_numbers card.own_numbers in
+      let curr_increment = deck.(card.id - 1) in
+      (* pretty print deck *)
+      Array.iter (fun x -> Printf.printf "%d " x) deck;
+      Printf.printf "\n";
+      loop rest (inc_next_n_by (card.id - 1) num_matches curr_increment deck)
+  in
+  loop cards deck |> Array.fold_left ( + ) 0
+;;

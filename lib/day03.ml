@@ -81,7 +81,7 @@ let solve_part_one data =
   |> List.flatten
   |> List.filter (fun digit_meta -> check_adjacent_positions digit_meta data)
   |> List.map (fun digit_meta -> digit_meta.value)
-  |> List.fold_left ( + ) 0
+  |> Utils.sum
 ;;
 
 let solve_part_two _data = failwith "Not implemented yet"
