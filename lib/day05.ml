@@ -84,6 +84,14 @@ let rec range start length =
   if length = 0 then [] else start :: range (start + 1) (length - 1)
 ;;
 
+(* tail recursive version of range *)
+let range2 start length =
+  let rec range' start length acc =
+    if length = 0 then acc else range' (start + 1) (length - 1) (start :: acc)
+  in
+  range' start length []
+;;
+
 (* transform list of ints into list of pairs *)
 let rec pairs = function
   | [] -> []
@@ -101,7 +109,7 @@ let solve_part_one data =
 let solve_part_two data =
   let seeds, maps = parse_input data in
   let pairs = pairs seeds in
-  let ranges = List.map (fun (a, b) -> range a b) pairs in
+  let ranges = List.map (fun (a, b) -> range2 a b) pairs in
   let ranges_flat = List.flatten ranges in
   let soil = List.map (fun seed -> translate_seed_to_soil seed maps) ranges_flat in
   (* min of the soil numbers *)

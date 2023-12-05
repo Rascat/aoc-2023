@@ -75,7 +75,12 @@ let test_parse_maps input expected =
 
 let test_solve_part_one input expected =
   let actual = solve_part_one input in
-  Alcotest.(check int) "same result" expected actual
+  Alcotest.(check int) "same result for part one" expected actual
+;;
+
+let test_solve_part_two input expected =
+  let actual = solve_part_two input in
+  Alcotest.(check int) "same result for part two" expected actual
 ;;
 
 let () =
@@ -150,6 +155,9 @@ let () =
         ] )
     ; ( "solve_part_one"
       , [ test_case "solve part one" `Quick (fun () -> test_solve_part_one test_data 35) ]
+      )
+    ; ( "solve_part_two"
+      , [ test_case "solve part two" `Quick (fun () -> test_solve_part_two test_data 46) ]
       )
     ]
 ;;
