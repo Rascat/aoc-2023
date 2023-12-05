@@ -12,5 +12,5 @@ let () =
   Printf.printf "Solution to Day 4.1: %i\n" (Aoc_2023.Day04.solve_part_one d4_data);
   Printf.printf "Solution to Day 4.2: %i\n" (Aoc_2023.Day04.solve_part_two d4_data);
   Printf.printf "Solution to Day 5.1: %i\n" (Aoc_2023.Day05.solve_part_one d5_data);
-  Printf.printf "Solution to Day 5.2: %i\n" (Aoc_2023.Day05.solve_part_two d5_data)
+  Printf.printf "Solution to Day 5.2: %i\n" (Aoc_2023.Day05.solve_part_two_seq d5_data)
 ;;

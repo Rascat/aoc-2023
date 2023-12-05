@@ -57,7 +57,7 @@ let translate_number number ~map =
     range.destination_range_start + offset
 ;;
 
-let translate_seed_to_soil seed_nr maps =
+let translate_seed_to_soil seed_nr ~maps =
   seed_nr
   |> translate_number ~map:(List.find (fun m -> m.name = "seed-to-soil") maps)
   |> translate_number ~map:(List.find (fun m -> m.name = "soil-to-fertilizer") maps)
@@ -92,6 +92,13 @@ let range2 start length =
   range' start length []
 ;;
 
+let range_seq start length =
+  let rec aux current end_ () =
+    if current > end_ then Seq.Nil else Seq.Cons (current, aux (current + 1) end_)
+  in
+  aux start (start + length - 1)
+;;
+
 (* transform list of ints into list of pairs *)
 let rec pairs = function
   | [] -> []
@@ -101,7 +108,7 @@ let rec pairs = function
 
 let solve_part_one data =
   let seeds, maps = parse_input data in
-  let soil = List.map (fun seed -> translate_seed_to_soil seed maps) seeds in
+  let soil = List.map (fun seed -> translate_seed_to_soil seed ~maps) seeds in
   (* min of the soil numbers *)
   List.fold_left min (List.hd soil) (List.tl soil)
 ;;
@@ -111,7 +118,21 @@ let solve_part_two data =
   let pairs = pairs seeds in
   let ranges = List.map (fun (a, b) -> range2 a b) pairs in
   let ranges_flat = List.flatten ranges in
-  let soil = List.map (fun seed -> translate_seed_to_soil seed maps) ranges_flat in
+  let soil = List.map (fun seed -> translate_seed_to_soil seed ~maps) ranges_flat in
   (* min of the soil numbers *)
   List.fold_left min (List.hd soil) (List.tl soil)
+;;
+
+let solve_part_two_seq data =
+  let seeds, maps = parse_input data in
+  let pairs = pairs seeds in
+  let mins =
+    List.map
+      (fun (a, b) ->
+        range_seq a b
+        |> Seq.map (translate_seed_to_soil ~maps)
+        |> Seq.fold_left min 1000000000)
+      pairs
+  in
+  List.fold_left min 1000000000 mins
 ;;
