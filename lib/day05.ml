@@ -115,24 +115,20 @@ let solve_part_one data =
 
 let solve_part_two data =
   let seeds, maps = parse_input data in
-  let pairs = pairs seeds in
-  let ranges = List.map (fun (a, b) -> range2 a b) pairs in
-  let ranges_flat = List.flatten ranges in
-  let soil = List.map (fun seed -> translate_seed_to_soil seed ~maps) ranges_flat in
-  (* min of the soil numbers *)
-  List.fold_left min (List.hd soil) (List.tl soil)
+  pairs seeds
+  |> List.map (fun (a, b) -> range2 a b)
+  |> List.flatten
+  |> List.map (fun seed -> translate_seed_to_soil seed ~maps)
+  |> (* min of the soil numbers *)
+  List.fold_left min Int.max_int
 ;;
 
 let solve_part_two_seq data =
   let seeds, maps = parse_input data in
-  let pairs = pairs seeds in
-  let mins =
-    List.map
-      (fun (a, b) ->
-        range_seq a b
-        |> Seq.map (translate_seed_to_soil ~maps)
-        |> Seq.fold_left min 1000000000)
-      pairs
-  in
-  List.fold_left min 1000000000 mins
+  pairs seeds
+  |> List.map (fun (a, b) ->
+    range_seq a b
+    |> Seq.map (translate_seed_to_soil ~maps)
+    |> Seq.fold_left min Int.max_int)
+  |> List.fold_left min Int.max_int
 ;;
