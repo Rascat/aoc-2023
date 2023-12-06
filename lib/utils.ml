@@ -25,3 +25,10 @@ let range start length =
   in
   range' start length []
 ;;
+
+let range_seq start length =
+  let rec aux current end_ () =
+    if current > end_ then Seq.Nil else Seq.Cons (current, aux (current + 1) end_)
+  in
+  aux start (start + length - 1)
+;;

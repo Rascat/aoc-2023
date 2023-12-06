@@ -13,6 +13,10 @@ let test_compute_distance (t_release, t_total) expected =
   Alcotest.(check int) "same distance" expected (compute_distance t_release t_total)
 ;;
 
+let test_solve_part_two () =
+  Alcotest.(check int) "same distance" 71503 (solve_part_two _test_data)
+;;
+
 let () =
   let open Alcotest in
   run
@@ -31,5 +35,6 @@ let () =
         ; test_case "#7" `Quick (fun () -> test_compute_distance (6, 7) 6)
         ; test_case "#8" `Quick (fun () -> test_compute_distance (7, 7) 0)
         ] )
+    ; "test_solve_part_two", [ test_case "#1" `Quick test_solve_part_two ]
     ]
 ;;
