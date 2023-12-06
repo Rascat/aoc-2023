@@ -18,3 +18,10 @@ let string_to_char_list s = s |> String.to_seq |> List.of_seq
 let char_list_to_string l = l |> List.to_seq |> String.of_seq
 let string_of_char c = String.make 1 c
 let sum l = List.fold_left ( + ) 0 l
+
+let range start length =
+  let rec range' start length acc =
+    if length = 0 then acc else range' (start + 1) (length - 1) (start :: acc)
+  in
+  range' start length []
+;;
