@@ -30,6 +30,31 @@ let navigate_map directions nodes start_nodes stop_on =
   navigate_map' directions start_nodes 0
 ;;
 
+let walk_loop directions nodes start_node =
+  let nodes_table = Hashtbl.create 1000 in
+  List.iter (fun n -> Hashtbl.add nodes_table n.id n) nodes;
+  let rec walk_loop' curr_directions curr_node count =
+    if String.ends_with ~suffix:"Z" curr_node.id
+    then count
+    else (
+      match curr_directions with
+      | [] -> walk_loop' directions curr_node count
+      | d :: rest ->
+        let next_node =
+          if d = 'L'
+          then Hashtbl.find nodes_table curr_node.left
+          else Hashtbl.find nodes_table curr_node.right
+        in
+        if String.ends_with next_node.id ~suffix:"Z"
+        then
+          print_endline
+            (Printf.sprintf "=== (%s)-[%c]->(%s) ===" curr_node.id d next_node.id)
+        else print_endline (Printf.sprintf "(%s)-[%c]->(%s)" curr_node.id d next_node.id);
+        walk_loop' rest next_node (count + 1))
+  in
+  walk_loop' directions start_node 0
+;;
+
 let solve_part_one data =
   let directions = parse_directions (List.hd data) in
   let nodes = List.tl (List.tl data) |> List.map parse_node in
@@ -45,4 +70,12 @@ let solve_part_two data =
   let start_nodes = List.find_all (fun n -> String.ends_with ~suffix:"A" n.id) nodes in
   let stop_on n = String.ends_with ~suffix:"Z" n.id in
   navigate_map directions nodes start_nodes stop_on
+;;
+
+let find_circles data =
+  let directions = parse_directions (List.hd data) in
+  let nodes = List.tl (List.tl data) |> List.map parse_node in
+  let start_nodes = List.find_all (fun n -> String.ends_with ~suffix:"A" n.id) nodes in
+  let circle_sizes = List.map (fun n -> walk_loop directions nodes n) start_nodes in
+  List.iter (fun s -> Printf.printf "%d " s) circle_sizes
 ;;

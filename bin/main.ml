@@ -19,6 +19,8 @@ let () =
   Printf.printf "Solution to Day 6.1: %i\n" (Aoc_2023.Day06.solve_part_one d6_data);
   Printf.printf "Solution to Day 6.2: %i\n" (Aoc_2023.Day06.solve_part_two d6_data);
   Printf.printf "Solution to Day 7.1: %i\n" (Aoc_2023.Day07.solve_part_one d7_data);
-  Printf.printf "Solution to Day 8.1: %i\n" (Aoc_2023.Day08.solve_part_one d8_data);
-  Printf.printf "Solution to Day 8.2: %i\n" (Aoc_2023.Day08.solve_part_two d8_data)
+  Printf.printf "Solution to Day 8.1: %i\n" (Aoc_2023.Day08.solve_part_one d8_data)
+(* Printf.printf "Solution to Day 8.2: %i\n" (Aoc_2023.Day08.solve_part_two d8_data) *)
 ;;
+
+Aoc_2023.Day08.find_circles d8_data
