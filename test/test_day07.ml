@@ -78,7 +78,7 @@ let () =
             test_compare_rounds
               ( { cards = [ 'T'; 'J'; '8'; '2'; '3' ]; bid = 0 }
               , { cards = [ '2'; 'T'; 'J'; '7'; 'A' ]; bid = 0 } )
-              (1))
+              1)
         ] )
     ; ( "test_sort_rounds"
       , [ test_case "#1" `Quick (fun () ->

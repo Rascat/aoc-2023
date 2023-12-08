@@ -90,11 +90,9 @@ let sort_rounds rounds = List.sort rounds ~compare:compare_rounds
 
 let solve_part_one data =
   let rounds = List.map ~f:parse_round data in
-  let sorted_rounds = rounds
-  |> sort_rounds in
+  let sorted_rounds = rounds |> sort_rounds in
   List.iter sorted_rounds ~f:(fun r -> print_round r);
-  List.foldi sorted_rounds ~init:0 ~f:(fun i acc r ->
-    acc + ((i + 1) * r.bid))
+  List.foldi sorted_rounds ~init:0 ~f:(fun i acc r -> acc + ((i + 1) * r.bid))
 ;;
 
 let solve_part_two _data = failwith "Not implemented"
