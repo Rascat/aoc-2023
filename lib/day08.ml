@@ -10,28 +10,39 @@ let parse_node l =
 
 let parse_directions s = Utils.string_to_char_list s
 
-let navigate_map directions nodes =
-  let rec navigate_map' curr_directions curr_node count =
-    if curr_node.id = "ZZZ"
+let navigate_map directions nodes start_nodes stop_on =
+  let nodes_table = Hashtbl.create 1000 in
+  List.iter (fun n -> Hashtbl.add nodes_table n.id n) nodes;
+  let rec navigate_map' curr_directions curr_nodes count =
+    if List.for_all stop_on curr_nodes
     then count
     else (
       match curr_directions with
-      | [] -> navigate_map' directions curr_node count
+      | [] -> navigate_map' directions curr_nodes count
       | d :: rest ->
-        let next_node =
+        let next_nodes =
           if d = 'L'
-          then List.find (fun n -> n.id = curr_node.left) nodes
-          else List.find (fun n -> n.id = curr_node.right) nodes
+          then List.map (fun cn -> Hashtbl.find nodes_table cn.left) curr_nodes
+          else List.map (fun cn -> Hashtbl.find nodes_table cn.right) curr_nodes
         in
-        navigate_map' rest next_node (count + 1))
+        navigate_map' rest next_nodes (count + 1))
   in
-  navigate_map' directions (List.find (fun n -> n.id = "AAA") nodes) 0
+  navigate_map' directions start_nodes 0
 ;;
 
 let solve_part_one data =
   let directions = parse_directions (List.hd data) in
   let nodes = List.tl (List.tl data) |> List.map parse_node in
-  navigate_map directions nodes
+  let start_nodes = List.find_all (fun n -> n.id = "AAA") nodes in
+  let stop_on n = n.id = "ZZZ" in
+  print_endline (Printf.sprintf "%d " (List.length start_nodes));
+  navigate_map directions nodes start_nodes stop_on
 ;;
 
-let solve_part_two _data = failwith "Not implemented"
+let solve_part_two data =
+  let directions = parse_directions (List.hd data) in
+  let nodes = List.tl (List.tl data) |> List.map parse_node in
+  let start_nodes = List.find_all (fun n -> String.ends_with ~suffix:"A" n.id) nodes in
+  let stop_on n = String.ends_with ~suffix:"Z" n.id in
+  navigate_map directions nodes start_nodes stop_on
+;;
