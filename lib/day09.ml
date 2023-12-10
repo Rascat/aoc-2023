@@ -33,6 +33,21 @@ let extrapolate_sequences sequences =
   aux [] sequences |> List.rev
 ;;
 
+let extrapolate_sequences2 sequences =
+  let rec aux acc s =
+    match s with
+    | [] -> failwith "should not happen"
+    | a :: rest ->
+      if List.for_all (fun d -> d = 0) a
+      then [ 0 ]
+      else (
+        let first_nr = List.hd a in
+        let exs = aux acc rest in
+        (first_nr - List.hd exs) :: exs)
+  in
+  aux [] sequences |> List.rev
+;;
+
 let solve_part_one data =
   let histories = List.map (fun l -> parse_history l) data in
   let extrapolated_values =
@@ -43,4 +58,12 @@ let solve_part_one data =
   List.fold_left ( + ) 0 extrapolated_values
 ;;
 
-let solve_part_two _data = failwith "Not implemented yet"
+let solve_part_two data =
+  let histories = List.map (fun l -> parse_history l) data in
+  let extrapolated_values =
+    List.map
+      (fun h -> generate_sequences h |> extrapolate_sequences2 |> List.rev |> List.hd)
+      histories
+  in
+  List.fold_left ( + ) 0 extrapolated_values
+;;
