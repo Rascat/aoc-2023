@@ -7,6 +7,7 @@ let () =
   let d6_data = Aoc_2023.Utils.read_lines "inputs/day06.txt" in
   let d7_data = Aoc_2023.Utils.read_lines "inputs/day07.txt" in
   let d8_data = Aoc_2023.Utils.read_lines "inputs/day08.txt" in
+  let d9_data = Aoc_2023.Utils.read_lines "inputs/day09.txt" in
   Printf.printf "Solution to Day 1.1: %i\n" (Aoc_2023.Day01.solve_part_one d1_data);
   Printf.printf "Solution to Day 1.2: %i\n" (Aoc_2023.Day01.solve_part_two d1_data);
   Printf.printf "Solution to Day 2.1: %i\n" (Aoc_2023.Day02.solve_part_one d2_data);
@@ -19,8 +20,7 @@ let () =
   Printf.printf "Solution to Day 6.1: %i\n" (Aoc_2023.Day06.solve_part_one d6_data);
   Printf.printf "Solution to Day 6.2: %i\n" (Aoc_2023.Day06.solve_part_two d6_data);
   Printf.printf "Solution to Day 7.1: %i\n" (Aoc_2023.Day07.solve_part_one d7_data);
-  Printf.printf "Solution to Day 8.1: %i\n" (Aoc_2023.Day08.solve_part_one d8_data)
-(* Printf.printf "Solution to Day 8.2: %i\n" (Aoc_2023.Day08.solve_part_two d8_data) *)
+  Printf.printf "Solution to Day 8.1: %i\n" (Aoc_2023.Day08.solve_part_one d8_data);
+  (* Printf.printf "Solution to Day 8.2: %i\n" (Aoc_2023.Day08.solve_part_two d8_data) *)
+  Printf.printf "Solution to Day 9.1: %i\n" (Aoc_2023.Day09.solve_part_one d9_data)
 ;;
-
-Aoc_2023.Day08.find_circles d8_data

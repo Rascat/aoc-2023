@@ -1,18 +1,3 @@
-let find_digits l =
-  let open Re.Str in
-  let re_numbers = regexp "\\([0-9]+\\)" in
-  let rec find_digits' starts_at =
-    match search_forward re_numbers l starts_at with
-    | exception Not_found -> []
-    | start ->
-      let s = matched_string l in
-      let value = int_of_string s in
-      let length = String.length s in
-      value :: find_digits' (start + length)
-  in
-  find_digits' 0
-;;
-
 let find_digits_as_strings l =
   let open Re.Str in
   let re_numbers = regexp "\\([0-9]+\\)" in
@@ -28,8 +13,8 @@ let find_digits_as_strings l =
 ;;
 
 let parse_races data =
-  let times = List.hd data |> find_digits in
-  let distances = List.nth data 1 |> find_digits in
+  let times = List.hd data |> Utils.find_digits in
+  let distances = List.nth data 1 |> Utils.find_digits in
   List.combine times distances
 ;;
 

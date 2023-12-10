@@ -32,3 +32,18 @@ let range_seq start length =
   in
   aux start (start + length - 1)
 ;;
+
+let find_digits l =
+  let open Re.Str in
+  let re_numbers = regexp "\\(-?[0-9]+\\)" in
+  let rec find_digits' starts_at =
+    match search_forward re_numbers l starts_at with
+    | exception Not_found -> []
+    | start ->
+      let s = matched_string l in
+      let value = int_of_string s in
+      let length = String.length s in
+      value :: find_digits' (start + length)
+  in
+  find_digits' 0
+;;
