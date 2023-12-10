@@ -19,7 +19,7 @@
  (name aoc_2023)
  (synopsis "A short synopsis")
  (description "My solutions to the Advent of Code 2023")
- (depends ocaml dune re base stdio (alcotest :with-test))
+ (depends ocaml dune re base stdio cmdliner (alcotest :with-test))
  (tags
   (topics "to describe" your project)))
 

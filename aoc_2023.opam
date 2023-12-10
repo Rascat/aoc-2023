@@ -15,6 +15,7 @@ depends: [
   "re"
   "base"
   "stdio"
+  "cmdliner"
   "alcotest" {with-test}
   "odoc" {with-doc}
 ]
