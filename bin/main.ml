@@ -23,6 +23,8 @@ let aoc_2023 day part file =
     | 9, 1 -> Some Aoc_2023.Day09.solve_part_one
     | 9, 2 -> Some Aoc_2023.Day09.solve_part_two
     | 10, 1 -> Some Aoc_2023.Day10.solve_part_one
+    | 11, 1 -> Some Aoc_2023.Day11.solve_part_one
+    | 11, 2 -> Some Aoc_2023.Day11.solve_part_two
     | _ -> None
   in
   match solver with
