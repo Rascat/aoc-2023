@@ -104,6 +104,8 @@ let solve_part_two data =
   let empty_cols = empty_column_indices image in
   let galaxies = find_all_galaxies image in
   let pairs = create_pairs galaxies in
-  List.map (fun p -> compute_distance_after_expansion p empty_rows empty_cols 1000000) pairs
+  List.map
+    (fun p -> compute_distance_after_expansion p empty_rows empty_cols 1000000)
+    pairs
   |> Utils.sum
 ;;

@@ -60,11 +60,12 @@ let walk_maze maze =
       | _ -> failwith "Invalid state")
   in
   match start with
-  | (start_x, start_y) -> walk' (start_x, start_y) (start_x, start_y + 1) maze 1
-  
+  | start_x, start_y -> walk' (start_x, start_y) (start_x, start_y + 1) maze 1
 ;;
 
-let solve_part_one data = 
+let solve_part_one data =
   let maze = parse_maze data in
-  (walk_maze maze) / 2
+  walk_maze maze / 2
+;;
+
 let solve_part_two _data = failwith "Not implemented yet"

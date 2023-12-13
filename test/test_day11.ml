@@ -32,7 +32,7 @@ let test_find_all_galaxies input expected =
 let test_compute_distance_after_expansion () =
   let test_case name input expected =
     Alcotest.test_case name `Quick (fun () ->
-      let actual = compute_distance_after_expansion input [ 3; 7 ] [ 2; 5; 8 ] in
+      let actual = compute_distance_after_expansion input [ 3; 7 ] [ 2; 5; 8 ] 2 in
       Alcotest.(check int) "same distance" expected actual)
   in
   [ test_case "Test case 1" ((1, 5), (4, 10)) 9 ]
