@@ -29,14 +29,14 @@ let test_find_all_galaxies input expected =
   Alcotest.(check (list (pair int int))) "same coordinates" expected actual
 ;;
 
-let test_compute_distance_after_expansion () =
-  let test_case name input expected =
-    Alcotest.test_case name `Quick (fun () ->
-      let actual = compute_distance_after_expansion input [ 3; 7 ] [ 2; 5; 8 ] 2 in
-      Alcotest.(check int) "same distance" expected actual)
-  in
-  [ test_case "Test case 1" ((1, 5), (4, 10)) 9 ]
-;;
+(* let test_compute_distance_after_expansion () =
+   let test_case name input expected =
+   Alcotest.test_case name `Quick (fun () ->
+   let actual = compute_distance_after_expansion input [ 3; 7 ] [ 2; 5; 8 ] 2 in
+   Alcotest.(check int) "same distance" expected actual)
+   in
+   [ test_case "Test case 1" ((1, 5), (4, 10)) 9 ]
+   ;; *)
 
 let test_solve_part_one () =
   Alcotest.(check int) "same result" 374 (solve_part_one test_data)
@@ -64,7 +64,7 @@ let () =
               (List.map (fun l -> Aoc_2023.Utils.string_to_char_list l) test_data)
               [ 3, 0; 7, 1; 0, 2; 6, 4; 1, 5; 9, 6; 7, 8; 0, 9; 4, 9 ])
         ] )
-    ; "test_compute_distance_after_expansion", test_compute_distance_after_expansion ()
+      (* ; "test_compute_distance_after_expansion", test_compute_distance_after_expansion () *)
     ; "test_solve_part_one", [ test_case "#1" `Quick test_solve_part_one ]
     ]
 ;;

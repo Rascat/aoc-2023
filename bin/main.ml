@@ -25,6 +25,7 @@ let aoc_2023 day part file =
     | 10, 1 -> Some Aoc_2023.Day10.solve_part_one
     | 11, 1 -> Some Aoc_2023.Day11.solve_part_one
     | 11, 2 -> Some Aoc_2023.Day11.solve_part_two
+    | 13, 1 -> Some Aoc_2023.Day13.solve_part_one
     | _ -> None
   in
   match solver with

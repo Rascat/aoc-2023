@@ -55,3 +55,13 @@ let find_digits l =
   in
   find_digits' 0
 ;;
+
+let rec transpose matrix =
+  match matrix with
+  | [] -> []
+  | [] :: _ -> []
+  | rows ->
+    let new_row = List.map List.hd rows in
+    let remaining = List.map List.tl rows in
+    new_row :: transpose remaining
+;;

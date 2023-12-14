@@ -11,5 +11,6 @@
   test_day09
   test_day10
   test_day11
+  test_day13
   test_utils)
  (libraries aoc_2023 alcotest))
