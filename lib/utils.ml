@@ -65,3 +65,14 @@ let rec transpose matrix =
     let remaining = List.map List.tl rows in
     new_row :: transpose remaining
 ;;
+
+
+let print_str_list list =
+  let rec loop = function
+    | [] -> print_endline ""
+    | l :: rest ->
+      print_endline l;
+      loop rest
+  in
+  loop list
+;;
