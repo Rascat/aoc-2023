@@ -1,3 +1,14 @@
+type direction =
+  | Up
+  | Down
+  | Left
+  | Right
+
+type ray =
+  { position : int * int
+  ; direction : direction
+  }
+
 let parse_grid data = List.map (fun l -> Utils.string_to_char_list l) data
 
 let get_char_at (x, y) grid =
@@ -19,39 +30,32 @@ let move_up (x, y) = x, y - 1
 let move_down (x, y) = x, y + 1
 let move_left (x, y) = x - 1, y
 let move_right (x, y) = x + 1, y
-let move_straight (x1, y1) (x2, y2) = x2 + (x2 - x1), y2 + (y2 - y1)
+
+let move_straight { position; direction } =
+  match direction with
+  | Up -> { position = move_up position; direction }
+  | Down -> { position = move_down position; direction }
+  | Left -> { position = move_left position; direction }
+  | Right -> { position = move_right position; direction }
+;;
 
 (* / *)
-let right_deflect (x1, y1) (x2, y2) =
-  match compare x1 x2 with
-  | -1 -> move_up (x2, y2)
-  | 1 -> move_down (x2, y2)
-  | 0 ->
-    (match compare y1 y2 with
-     | -1 -> move_left (x2, y2)
-     | 1 -> move_right (x2, y2)
-     | _ -> failwith "Error in right_deflect: p1 should not equal p2")
-  | _ -> failwith "Error in right_deflect: compare returned unexpected result"
+let right_deflect { position; direction } =
+  match direction with
+  | Up -> { position = move_right position; direction = Right }
+  | Down -> { position = move_left position; direction = Left }
+  | Left -> { position = move_down position; direction = Down }
+  | Right -> { position = move_up position; direction = Up }
 ;;
 
 (* \ *)
-let left_deflect (x1, y1) (x2, y2) =
-  match compare x1 x2 with
-  | -1 -> move_down (x2, y2)
-  | 1 -> move_up (x2, y2)
-  | 0 ->
-    (match compare y1 y2 with
-     (* j *)
-     | -1 -> move_right (x2, y2)
-     | 1 -> move_left (x2, y2)
-     | _ -> failwith "Error in right_deflect: p1 should not equal p2")
-  | _ -> failwith "Error in right_deflect: compare x1 x2 returned unexpected result"
+let left_deflect { position; direction } =
+  match direction with
+  | Up -> { position = move_left position; direction = Left }
+  | Down -> { position = move_right position; direction = Right }
+  | Left -> { position = move_up position; direction = Up }
+  | Right -> { position = move_down position; direction = Down }
 ;;
-
-let move_up (x, y) = x, y - 1
-let move_down (x, y) = x, y + 1
-let move_left (x, y) = x - 1, y
-let move_right (x, y) = x + 1, y
 
 (*
    A function which given a current position p1 and a last position p0
@@ -59,43 +63,41 @@ let move_right (x, y) = x + 1, y
 *)
 let simulate_beam grid =
   let junction_map = Hashtbl.create 100 in
-  let rec walk visited last_pos current_pos =
-    match current_pos with
-    | x, y ->
-      (match get_char_at (x, y) grid with
-       | None -> visited
-       | Some c ->
-         (match c with
-          | '.' -> walk ((x, y) :: visited) (x, y) (move_straight last_pos (x, y))
-          | '/' -> walk ((x, y) :: visited) (x, y) (right_deflect last_pos (x, y))
-          | '\\' -> walk ((x, y) :: visited) (x, y) (left_deflect last_pos (x, y))
-          | '|' ->
-            (match last_pos with
-             | latest_x, _ ->
-               if x - latest_x = 0
-               then walk ((x, y) :: visited) (x, y) (move_straight last_pos (x, y))
-               else (
-                 match Hashtbl.find_opt junction_map (x, y) with
-                 | None ->
-                   Hashtbl.add junction_map (x, y) true;
-                   walk ((x, y) :: visited) (x, y) (move_up (x, y))
-                   @ walk ((x, y) :: visited) (x, y) (move_down (x, y))
-                 | Some _ -> visited))
-          | '-' ->
-            (match last_pos with
-             | _, latest_y ->
-               if y - latest_y = 0
-               then walk ((x, y) :: visited) (x, y) (move_straight last_pos (x, y))
-               else (
-                 match Hashtbl.find_opt junction_map (x, y) with
-                 | None ->
-                   Hashtbl.add junction_map (x, y) true;
-                   walk ((x, y) :: visited) (x, y) (move_left (x, y))
-                   @ walk ((x, y) :: visited) (x, y) (move_right (x, y))
-                 | Some _ -> visited))
-          | _ as t -> failwith ("encountered unexpected tile: " ^ String.make 1 t)))
+  let rec walk visited ({ position = x, y; direction } as ray) =
+    match get_char_at (x, y) grid with
+    | None -> visited
+    | Some c ->
+      (match c with
+       | '.' -> walk ((x, y) :: visited) (move_straight ray)
+       | '/' -> walk ((x, y) :: visited) (right_deflect ray)
+       | '\\' -> walk ((x, y) :: visited) (left_deflect ray)
+       | '|' ->
+         (match direction with
+          | Up | Down -> walk ((x, y) :: visited) (move_straight ray)
+          | Left | Right ->
+            (match Hashtbl.find_opt junction_map (x, y) with
+             | None ->
+               Hashtbl.add junction_map (x, y) true;
+               walk ((x, y) :: visited) { position = move_up (x, y); direction = Up }
+               @ walk
+                   ((x, y) :: visited)
+                   { position = move_down (x, y); direction = Down }
+             | Some _ -> visited))
+       | '-' ->
+         (match direction with
+          | Left | Right -> walk ((x, y) :: visited) (move_straight ray)
+          | Up | Down ->
+            (match Hashtbl.find_opt junction_map (x, y) with
+             | None ->
+               Hashtbl.add junction_map (x, y) true;
+               walk ((x, y) :: visited) { position = move_left (x, y); direction = Left }
+               @ walk
+                   ((x, y) :: visited)
+                   { position = move_right (x, y); direction = Right }
+             | Some _ -> visited))
+       | _ as t -> failwith ("encountered unexpected tile: " ^ String.make 1 t))
   in
-  walk [] (-1, 0) (0, 0)
+  walk [] { position = 0, 0; direction = Right }
 ;;
 
 let solve_part_one data =
