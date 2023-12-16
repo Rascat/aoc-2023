@@ -62,7 +62,6 @@ let simulate_beam grid =
   let rec walk visited last_pos current_pos =
     match current_pos with
     | x, y ->
-      print_coord (x, y);
       (match get_char_at (x, y) grid with
        | None -> visited
        | Some c ->
@@ -101,9 +100,7 @@ let simulate_beam grid =
 
 let solve_part_one data =
   let grid = parse_grid data in
-  (* Utils.print_char_grid grid; *)
   let visited = simulate_beam grid in
-  print_visited visited;
   List.sort_uniq (fun p1 p2 -> compare p1 p2) visited |> List.length
 ;;
 
