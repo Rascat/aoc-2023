@@ -66,6 +66,21 @@ let rec transpose matrix =
     new_row :: transpose remaining
 ;;
 
+let print_char_grid grid =
+  let rec loop_inner = function
+    | [] -> print_char '\n'
+    | c :: rest ->
+      print_char c;
+      loop_inner rest
+  in
+  let rec loop_outer = function
+    | [] -> print_endline ""
+    | r :: rest ->
+      loop_inner r;
+      loop_outer rest
+  in
+  loop_outer grid
+;;
 
 let print_str_list list =
   let rec loop = function
