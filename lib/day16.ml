@@ -57,11 +57,7 @@ let left_deflect { position; direction } =
   | Right -> { position = move_down position; direction = Down }
 ;;
 
-(*
-   A function which given a current position p1 and a last position p0
-   computes the next position(s) and returns the list of all visited positions
-*)
-let simulate_beam grid =
+let simulate_beam grid start_ray =
   let junction_map = Hashtbl.create 100 in
   let rec walk visited ({ position = x, y; direction } as ray) =
     match get_char_at (x, y) grid with
@@ -97,13 +93,48 @@ let simulate_beam grid =
              | Some _ -> visited))
        | _ as t -> failwith ("encountered unexpected tile: " ^ String.make 1 t))
   in
-  walk [] { position = 0, 0; direction = Right }
+  walk [] start_ray
+;;
+
+let count_visited_positions visited =
+  List.sort_uniq (fun p1 p2 -> compare p1 p2) visited |> List.length
+;;
+
+let create_start_positions rows columns =
+  let row_indices = Utils.range 0 rows in
+  let column_indices = Utils.range 0 columns in
+  let column_start_positions =
+    List.map
+      (fun i ->
+        [ { position = i, 0; direction = Down }
+        ; { position = i, rows - 1; direction = Up }
+        ])
+      column_indices
+    |> List.flatten
+  in
+  let row_start_positions =
+    List.map
+      (fun i ->
+        [ { position = 0, i; direction = Right }
+        ; { position = columns - 1, i; direction = Left }
+        ])
+      row_indices
+    |> List.flatten
+  in
+  column_start_positions @ row_start_positions
 ;;
 
 let solve_part_one data =
   let grid = parse_grid data in
-  let visited = simulate_beam grid in
-  List.sort_uniq (fun p1 p2 -> compare p1 p2) visited |> List.length
+  let visited = simulate_beam grid { position = 0, 0; direction = Right } in
+  count_visited_positions visited
 ;;
 
-let solve_part_two _data = failwith "Not implemented yet"
+let solve_part_two data =
+  let grid = parse_grid data in
+  let rows = List.length grid in
+  let columns = List.length (List.hd grid) in
+  let start_positions = create_start_positions rows columns in
+  List.map (fun pos -> simulate_beam grid pos |> count_visited_positions) start_positions
+  |> List.fold_left max 0
+;;
