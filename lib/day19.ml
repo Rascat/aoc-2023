@@ -33,22 +33,10 @@ let parse_step s =
     let target = matched_group 4 s in
     let category_selector =
       match category with
-      | 'x' ->
-        fun (part : part) ->
-          (match part with
-           | { x; m = _; a = _; s = _ } -> x)
-      | 'm' ->
-        fun part ->
-          (match part with
-           | { x = _; m; a = _; s = _ } -> m)
-      | 'a' ->
-        fun part ->
-          (match part with
-           | { x = _; m = _; a; s = _ } -> a)
-      | 's' ->
-        fun part ->
-          (match part with
-           | { x = _; m = _; a = _; s } -> s)
+      | 'x' -> fun { x; _ } -> x
+      | 'm' -> fun { m; _ } -> m
+      | 'a' -> fun { a; _ } -> a
+      | 's' -> fun { s; _ } -> s
       | _ -> failwith ("Could not parse category" ^ String.make 1 category)
     in
     match comparison_operator with
@@ -87,11 +75,13 @@ let is_accepted part workflows start_label =
   aux (List.assoc start_label workflows)
 ;;
 
-let add_ratings { x; m; a; s } = x + m + a + s 
+let add_ratings { x; m; a; s } = x + m + a + s
 
 let solve_part_one data =
   let blocks = parse_blocks data in
   let workflows = List.nth blocks 0 |> List.map parse_workflow in
   let parts = List.nth blocks 1 |> List.map parse_part in
-  List.filter (fun p -> is_accepted p workflows "in") parts |> List.map add_ratings |> Utils.sum
+  List.filter (fun p -> is_accepted p workflows "in") parts
+  |> List.map add_ratings
+  |> Utils.sum
 ;;
