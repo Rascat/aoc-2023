@@ -86,7 +86,7 @@ let print_str_list list =
   let rec loop = function
     | [] -> print_endline ""
     | l :: rest ->
-      print_endline l;
+      print_string (l ^ " ");
       loop rest
   in
   loop list
