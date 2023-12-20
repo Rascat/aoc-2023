@@ -16,10 +16,10 @@ type counter =
   ; mutable count_high : int
   }
 
-type game_state =
-  { modules : (string, pulse_module) Hashtbl.t
-  ; mutable current_modules : string list
-  ; counter : counter
+type pulse =
+  { source : string
+  ; target : string
+  ; is_high : bool
   }
 
 let parse_module s =
@@ -58,14 +58,6 @@ let get_inputs_of target_label state =
     state
 ;;
 
-type pulse =
-  { source : string
-  ; target : string
-  ; is_high : bool
-  }
-
-(* let input_modules l state = List.find_all (fun { outputs; _ } -> List.mem l outputs) state *)
-
 (*
    The cycle consists of the follwing steps:
    1. Given the current modules, for each determine whether to send a pulse or not,
@@ -79,7 +71,6 @@ let run_cycles module_state start_pulse counter =
     List.iter
       (fun p -> print_endline (Printf.sprintf "%s -%b-> %s" p.source p.is_high p.target))
       current_pulses;
-    (* print_endline (Printf.sprintf "%d, %d" counter.count_low counter.count_high); *)
     let next_pulses = ref [] in
     match current_pulses with
     | [] -> ()
@@ -89,30 +80,28 @@ let run_cycles module_state start_pulse counter =
           let target_mod = get_module target module_state in
           let pulse_opt =
             match target_mod with
-            | Some FlipFlop (_, ff_state, _) ->
+            | Some (FlipFlop (_, ff_state, _)) ->
               if is_high
               then None
               else (
                 ff_state.current <- not ff_state.current;
                 Some ff_state.current)
-            | Some Conjunction (_, state, _) ->
+            | Some (Conjunction (_, state, _)) ->
               Hashtbl.replace state.inputs source is_high;
               if Hashtbl.fold
-                   (fun _ input_status acc ->
-                     (* print_endline ("--" ^ l ^ "--"); *)
-                     input_status && acc)
+                   (fun _ input_status acc -> input_status && acc)
                    state.inputs
                    true
               then Some false
               else Some true
-            | Some Broadcaster _ -> Some false
+            | Some (Broadcaster _) -> Some false
             | None -> None
           in
           let outputs =
             match target_mod with
-            | Some FlipFlop (_, _, outputs) -> outputs
-            | Some Conjunction (_, _, outputs) -> outputs
-            | Some Broadcaster (_, outputs) -> outputs
+            | Some (FlipFlop (_, _, outputs)) -> outputs
+            | Some (Conjunction (_, _, outputs)) -> outputs
+            | Some (Broadcaster (_, outputs)) -> outputs
             | None -> []
           in
           match pulse_opt with
@@ -158,6 +147,5 @@ let solve_part_one data =
       { source = "button"; target = "broadcaster"; is_high = false }
       counter
   done;
-  print_endline (Printf.sprintf "(lo: %d, hi: %d)" counter.count_low counter.count_high);
   counter |> fun { count_high; count_low } -> count_high * count_low
 ;;
