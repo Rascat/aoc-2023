@@ -60,9 +60,10 @@ let compute_positions steps start grid =
   iterate known_positions steps
 ;;
 
-let solve_part_one data = 
+let solve_part_one data =
   let grid = parse_grid data in
   let start_pos = find_char_pos 'S' grid in
   let final_positions = compute_positions 64 start_pos grid in
   (* Somehow there is an off-by-one error in the result, quickfix for now *)
-  Hashtbl.length final_positions + 1;
+  Hashtbl.length final_positions + 1
+;;

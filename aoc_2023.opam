@@ -5,7 +5,7 @@ description: "My solutions to the Advent of Code 2023"
 maintainer: ["Maintainer Name"]
 authors: ["Rascat"]
 license: "LICENSE"
-tags: ["topics" "to describe" "your" "project"]
+tags: ["adventofcode"]
 homepage: "https://github.com/Rascat/aoc_2023"
 doc: "https://url/to/documentation"
 bug-reports: "https://github.com/Rascat/aoc_2023/issues"
@@ -16,6 +16,7 @@ depends: [
   "base"
   "stdio"
   "cmdliner"
+  "stdio"
   "alcotest" {with-test}
   "odoc" {with-doc}
 ]
