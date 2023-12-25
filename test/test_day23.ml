@@ -27,7 +27,10 @@ let test_data =
 ;;
 
 let test_walk () =
-  Alcotest.(check (list (list (pair int int)))) "same paths" [] (walk (parse_grid test_data))
+  Alcotest.(check (list (list (pair int int))))
+    "same paths"
+    []
+    (walk (parse_grid test_data))
 ;;
 
 let () =

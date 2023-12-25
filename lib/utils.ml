@@ -91,3 +91,7 @@ let print_str_list list =
   in
   loop list
 ;;
+
+let cartesian l1 l2 =
+  List.map (fun e1 -> List.map (fun e2 -> e1, e2) l2) l1 |> List.flatten
+;;
